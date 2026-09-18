@@ -1,0 +1,203 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+
+.app {
+  min-height: 100vh;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 8px;
+  color: #222;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 35px;
+}
+
+/* Counter */
+
+.counter-box {
+  width: 350px;
+  margin: 0 auto 40px;
+  padding: 20px;
+
+  background: white;
+  border-radius: 12px;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.counter-box h2 {
+  margin-top: 0;
+}
+
+.counter-box p {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Flow */
+
+.flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Parent */
+
+.box {
+  width: 250px;
+  padding: 20px;
+
+  background: white;
+  border-radius: 12px;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.box strong {
+  display: block;
+  font-size: 24px;
+}
+
+.box span {
+  display: block;
+  margin-top: 8px;
+  color: #666;
+}
+
+.parent {
+  border: 2px solid #4f46e5;
+}
+
+/* Arrow */
+
+.arrow {
+  margin: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #4f46e5;
+}
+
+/* Child */
+
+.profile-card {
+  position: relative;
+
+  width: 350px;
+  padding: 30px;
+
+  background: white;
+  border-radius: 18px;
+
+  border: 2px solid #16a34a;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  padding: 5px 9px;
+
+  border-radius: 20px;
+
+  background: #dcfce7;
+  color: #166534;
+
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.avatar {
+  width: 70px;
+  height: 70px;
+
+  margin: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #16a34a;
+  color: white;
+
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.profile-card h2 {
+  margin: 15px 0 5px;
+}
+
+.role {
+  color: #666;
+}
+
+.info {
+  margin: 20px 0;
+  padding: 12px;
+
+  background: #f3f4f6;
+  border-radius: 8px;
+}
+
+/* Skills */
+
+.skills-section {
+  margin-top: 20px;
+}
+
+.skills {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.skill {
+  padding: 7px 12px;
+
+  border-radius: 20px;
+
+  background: #e0e7ff;
+  color: #3730a3;
+
+  font-size: 14px;
+}
+
+/* Child button */
+
+.child-button {
+  margin-top: 25px;
+
+  padding: 12px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #16a34a;
+  color: white;
+
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.child-button:hover {
+  opacity: 0.85;
+}

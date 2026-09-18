@@ -1,0 +1,95 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+
+.app {
+  min-height: 100vh;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* Component boxes */
+
+.component-box {
+  padding: 20px;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.app-box {
+  width: 300px;
+  border: 3px solid #4f46e5;
+}
+
+.dashboard-box {
+  width: 400px;
+  border: 3px solid #f59e0b;
+}
+
+.profile-box {
+  width: 350px;
+  border: 3px solid #ef4444;
+}
+
+.user-card-box {
+  width: 320px;
+  border: 3px solid #16a34a;
+}
+
+/* Description */
+
+.component-description {
+  font-size: 14px;
+  color: #777;
+}
+
+/* Arrow */
+
+.arrow {
+  margin: 12px;
+  font-weight: bold;
+  color: #4f46e5;
+}
+
+/* User */
+
+.user-info {
+  padding: 20px;
+  border-radius: 12px;
+  background: #f0fdf4;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+
+  margin: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #16a34a;
+  color: white;
+
+  font-size: 25px;
+  font-weight: bold;
+}
