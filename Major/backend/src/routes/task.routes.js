@@ -1,0 +1,22 @@
+import express from "express";
+import {
+    createTask,
+    getTasks
+} from "../controllers/task.controller.js";
+
+import { authenticate } from "../middleware/auth.middleware.js";
+
+const router = express.Router();
+
+router.post(
+    "/",
+    authenticate,
+    createTask
+);
+router.get(
+  "/",
+  authenticate,
+  getTasks
+);
+
+export default router;
