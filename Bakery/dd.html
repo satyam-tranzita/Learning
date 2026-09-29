@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Étoile - Boutique Artisanal Bakery</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FDFBF7',
+                        'cream-dark': '#F4EFE6',
+                        chocolat: '#2C1A14',
+                        'chocolat-light': '#4A3228',
+                        gold: '#D4A359',
+                        'gold-light': '#E9C488',
+                        berry: '#8C2D41',
+                        'berry-soft': '#FBF0F2',
+                        blush: '#F7E7E2',
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft-warm': '0 20px 40px -15px rgba(44, 26, 20, 0.07)',
+                        'glow-gold': '0 0 25px rgba(212, 163, 89, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Keyframe Animations & Glassmorphism */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(10px) rotate(-2deg); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.08); }
+        }
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+
+        .animate-float-slow { animation: floatSlow 6s ease-in-out infinite; }
+        .animate-float-reverse { animation: floatReverse 7s ease-in-out infinite; }
+        .animate-pulse-glow { animation: pulseGlow 4s ease-in-out infinite; }
+        .animate-spin-slow { animation: spinSlow 20s linear infinite; }
+
+        /* Tilt smooth transitions */
+        .tilt-card {
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+            transform-style: preserve-3d;
+        }
+
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(253, 251, 247, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(212, 163, 89, 0.18);
+        }
+
+        .glass-dark {
+            background: rgba(44, 26, 20, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(212, 163, 89, 0.25);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FDFBF7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4A359;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2C1A14;
+        }
+
+        /* Scroll Animation Target */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-on-scroll.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Interactive Cake SVG Visualizer Styles */
+        .cake-layer { transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    </style>
+</head>
+<body class="bg-cream text-chocolat font-sans overflow-x-hidden relative selection:bg-gold selection:text-cream">
+
+    <!-- Background Particles Canvas -->
+    <canvas id="dustCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-60"></canvas>
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-40 transition-all duration-300" id="mainHeader">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 sm:h-24 transition-all duration-300" id="navContainer">
+                
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-chocolat flex items-center justify-center text-gold group-hover:scale-105 group-hover:rotate-12 transition-transform duration-300 shadow-md">
+                        <i class="fa-solid fa-wheat-awn text-lg sm:text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-chocolat block leading-none">L'Étoile</span>
+                        <span class="text-[10px] tracking-[0.25em] uppercase text-gold font-semibold block mt-1">Artisanal Bakery</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+                    <a href="#hero" class="hover:text-gold transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-gold hover:after:w-full after:transition-all">Home</a>
+                    <a href="#menu" class="hover:text-gold transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-gold hover:after:w-full after:transition-all">Menu & Treats</a>
+                    <a href="#customizer" class="hover:text-gold transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-gold hover:after:w-full after:transition-all">Custom Cake Studio</a>
+                    <a href="#story" class="hover:text-gold transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-gold hover:after:w-full after:transition-all">Our Craft</a>
+                    <a href="#reviews" class="hover:text-gold transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-gold hover:after:w-full after:transition-all">Testimonials</a>
+                </nav>
+
+                <!-- Actions / Cart CTA -->
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <!-- Live Status Badge -->
+                    <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-berry-soft border border-berry/10 text-xs text-berry font-medium">
+                        <span class="w-2 h-2 rounded-full bg-berry animate-ping"></span>
+                        <span>Baking Fresh Right Now</span>
+                    </div>
+
+                    <!-- Cart Trigger Button -->
+                    <button id="openCartBtn" onclick="toggleCart(true)" class="relative p-2.5 sm:p-3 rounded-full bg-cream-dark hover:bg-gold hover:text-white transition-all duration-300 text-chocolat group shadow-sm">
+                        <i class="fa-solid fa-basket-shopping text-lg group-hover:scale-110 transition-transform"></i>
+                        <span id="cartCountBadge" class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-berry text-white text-[10px] font-bold flex items-center justify-center scale-0 transition-transform duration-300">0</span>
+                    </button>
+
+                    <!-- Mobile Navigation Toggle -->
+                    <button id="mobileMenuToggle" onclick="toggleMobileNav()" class="md:hidden p-2.5 rounded-xl bg-cream-dark text-chocolat hover:text-gold">
+                        <i class="fa-solid fa-bars-staggered text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileNav" class="hidden md:hidden glass-panel border-b border-gold/20 px-6 py-6 transition-all">
+            <div class="flex flex-col gap-4 text-base font-medium">
+                <a href="#hero" onclick="toggleMobileNav()" class="py-2 border-b border-chocolat/5 hover:text-gold">Home</a>
+                <a href="#menu" onclick="toggleMobileNav()" class="py-2 border-b border-chocolat/5 hover:text-gold">Menu & Treats</a>
+                <a href="#customizer" onclick="toggleMobileNav()" class="py-2 border-b border-chocolat/5 hover:text-gold">Custom Cake Studio</a>
+                <a href="#story" onclick="toggleMobileNav()" class="py-2 border-b border-chocolat/5 hover:text-gold">Our Craft</a>
+                <a href="#reviews" onclick="toggleMobileNav()" class="py-2 border-b border-chocolat/5 hover:text-gold">Testimonials</a>
+                <div class="pt-2 flex items-center gap-2 text-xs text-berry font-medium">
+                    <span class="w-2 h-2 rounded-full bg-berry animate-ping"></span>
+                    <span>Baking Fresh Right Now</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="relative z-10 pt-24 sm:pt-28">
+
+        <!-- HERO SECTION -->
+        <section id="hero" class="relative min-h-[calc(100vh-6rem)] flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden py-12">
+            <!-- Decorative Ambient Glows -->
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gold/15 rounded-full blur-[120px] pointer-events-none animate-pulse-glow"></div>
+            <div class="absolute bottom-10 right-10 w-72 h-72 bg-berry/10 rounded-full blur-[90px] pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                
+                <!-- Left Text Content -->
+                <div class="lg:col-span-7 text-center lg:text-left space-y-6 sm:space-y-8 reveal-on-scroll">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blush border border-gold/30 text-chocolat text-xs sm:text-sm font-semibold tracking-wide">
+                        <i class="fa-solid fa-award text-gold"></i>
+                        <span> Voted Paris Best Croissant 2025</span>
+                    </div>
+
+                    <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-chocolat leading-[1.15]">
+                        Baked with <span class="italic font-normal text-berry relative inline-block">
+                            Passion
+                            <svg class="absolute -bottom-2 left-0 w-full h-3 text-gold/40" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="0 15 Q 50 0 100 15" stroke="currentColor" stroke-width="4" fill="none"/></svg>
+                        </span>, Served with Elegance.
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-chocolat-light/80 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                        Handcrafted daily using 100% organic French butter, wild yeast starters, and seasonal berries. Experience the pure magic of slow-fermented pastries and bespoke couture cakes.
+                    </p>
+
+                    <!-- CTAs -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#menu" class="w-full sm:w-auto px-8 py-4 rounded-full bg-chocolat text-cream font-semibold hover:bg-gold hover:text-chocolat transition-all duration-300 shadow-lg hover:shadow-glow-gold flex items-center justify-center gap-3 group">
+                            <span>Explore Fresh Menu</span>
+                            <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+
+                        <a href="#customizer" class="w-full sm:w-auto px-8 py-4 rounded-full bg-cream-dark text-chocolat font-semibold border border-gold/30 hover:border-gold hover:bg-white transition-all duration-300 flex items-center justify-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-wand-magic-sparkles text-gold"></i>
+                            <span>Build Custom Cake</span>
+                        </a>
+                    </div>
+
+                    <!-- Trust Stats -->
+                    <div class="pt-8 grid grid-cols-3 gap-4 border-t border-chocolat/10 max-w-lg mx-auto lg:mx-0 text-center lg:text-left">
+                        <div>
+                            <span class="block font-serif text-2xl sm:text-3xl font-bold text-chocolat">48 hrs</span>
+                            <span class="text-xs text-chocolat-light/70 uppercase tracking-wider font-semibold">Slow Ferment</span>
+                        </div>
+                        <div>
+                            <span class="block font-serif text-2xl sm:text-3xl font-bold text-chocolat">100%</span>
+                            <span class="text-xs text-chocolat-light/70 uppercase tracking-wider font-semibold">Organic Butter</span>
+                        </div>
+                        <div>
+                            <span class="block font-serif text-2xl sm:text-3xl font-bold text-chocolat">15k+</span>
+                            <span class="text-xs text-chocolat-light/70 uppercase tracking-wider font-semibold">Happy Foodies</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Visual Floating Showcase with 3D Tilt Effect -->
+                <div class="lg:col-span-5 relative flex justify-center reveal-on-scroll">
+                    <!-- Main Showcase Card -->
+                    <div id="heroCard" class="tilt-card relative w-full max-w-md aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white/60 group">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1000&q=80" 
+                             alt="Artisanal French Croissant" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+
+                        <div class="absolute inset-0 bg-gradient-to-t from-chocolat/80 via-transparent to-transparent"></div>
+
+                        <!-- Badge Overlay on Card -->
+                        <div class="absolute bottom-6 left-6 right-6 glass-dark p-4 rounded-2xl text-cream">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs text-gold font-semibold uppercase tracking-wider">Morning Specialty</span>
+                                    <h3 class="font-serif text-xl font-bold">Signature Honey Flake Croissant</h3>
+                                </div>
+                                <span class="font-serif text-xl font-bold text-gold">$5.50</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Badge 1 -->
+                    <div class="absolute -top-6 -left-6 sm:-left-10 glass-panel p-4 rounded-2xl shadow-soft-warm animate-float-slow hidden sm:flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold">
+                            <i class="fa-solid fa-fire text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-chocolat-light/70 font-semibold">Fresh From Oven</p>
+                            <p class="text-sm font-bold text-chocolat">Next batch: 12 mins</p>
+                        </div>
+                    </div>
+
+                    <!-- Floating Badge 2 -->
+                    <div class="absolute -bottom-6 -right-6 sm:-right-8 glass-panel p-4 rounded-2xl shadow-soft-warm animate-float-reverse hidden sm:flex items-center gap-3">
+                        <div class="flex -space-x-2">
+                            <img class="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="User">
+                            <img class="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="User">
+                        </div>
+                        <div class="text-xs">
+                            <div class="flex text-gold">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <span class="font-bold text-chocolat">4.9/5 Rating (2.8k+)</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- MENU & CATALOG SECTION -->
+        <section id="menu" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-12 reveal-on-scroll">
+                <span class="text-xs font-bold uppercase tracking-[0.2em] text-gold">Daily Creations</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold text-chocolat">Explore Our Fresh Delights</h2>
+                <p class="text-chocolat-light/80 text-sm sm:text-base">Every treat is baked fresh at sunrise using authentic traditional methods and pure wholesome ingredients.</p>
+            </div>
+
+            <!-- Filter Categories Tabs -->
+            <div class="flex items-center justify-center gap-2 sm:gap-4 flex-wrap mb-12 reveal-on-scroll">
+                <button onclick="filterMenu('all')" class="menu-tab active px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 bg-chocolat text-cream shadow-md" data-category="all">
+                    All Treats
+                </button>
+                <button onclick="filterMenu('cakes')" class="menu-tab px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 bg-cream-dark text-chocolat hover:bg-gold hover:text-white" data-category="cakes">
+                    Cakes & Tarts
+                </button>
+                <button onclick="filterMenu('pastries')" class="menu-tab px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 bg-cream-dark text-chocolat hover:bg-gold hover:text-white" data-category="pastries">
+                    Pastries
+                </button>
+                <button onclick="filterMenu('breads')" class="menu-tab px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 bg-cream-dark text-chocolat hover:bg-gold hover:text-white" data-category="breads">
+                    Artisanal Breads
+                </button>
+                <button onclick="filterMenu('coffee')" class="menu-tab px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 bg-cream-dark text-chocolat hover:bg-gold hover:text-white" data-category="coffee">
+                    Coffee & Drinks
+                </button>
+            </div>
+
+            <!-- Menu Grid -->
+            <div id="menuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </section>
+
+        <!-- CUSTOM CAKE BUILDER STUDIO -->
+        <section id="customizer" class="py-20 sm:py-28 bg-cream-dark/60 relative overflow-hidden border-y border-gold/15">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto space-y-4 mb-16 reveal-on-scroll">
+                    <span class="text-xs font-bold uppercase tracking-[0.2em] text-gold">Customization Studio</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-bold text-chocolat">Design Your Dream Cake</h2>
+                    <p class="text-chocolat-light/80 text-sm sm:text-base">Interactive cake builder. Choose your flavor, frosting, toppings, and size with live visual preview.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left: Interactive Visual Cake Canvas Preview -->
+                    <div class="lg:col-span-6 flex flex-col items-center justify-center glass-panel p-8 sm:p-12 rounded-3xl relative shadow-soft-warm min-h-[420px] reveal-on-scroll">
+                        <div class="absolute top-4 left-4 text-xs font-bold text-gold uppercase tracking-wider">
+                            <i class="fa-solid fa-eye mr-1"></i> Live Visual Preview
+                        </div>
+
+                        <!-- Dynamic SVG Cake Renderer -->
+                        <div class="relative w-64 h-72 flex flex-col items-center justify-end my-4">
+                            <!-- Cake Stand -->
+                            <div class="w-60 h-4 bg-gray-300 rounded-full shadow-md z-10"></div>
+                            <div class="w-24 h-10 bg-gray-200 clip-path-stand z-0 -mt-2"></div>
+
+                            <!-- Cake Layers Container (Stacking dynamically) -->
+                            <div id="cakeVisualContainer" class="absolute bottom-4 flex flex-col items-center transition-all duration-500">
+                                <!-- Top Topping Graphic -->
+                                <div id="visualTopping" class="text-3xl mb-[-10px] z-30 transition-all duration-300 transform scale-100">
+                                    🍓🍓🍓
+                                </div>
+
+                                <!-- Layer 3 (Top tier - if tiered) -->
+                                <div id="visualTier3" class="cake-layer w-28 h-12 rounded-t-lg border-b-2 border-black/10 shadow-inner z-20 flex items-center justify-center text-xs font-bold text-white/80 transition-all" style="background-color: #8C2D41;">
+                                </div>
+
+                                <!-- Layer 2 (Middle tier) -->
+                                <div id="visualTier2" class="cake-layer w-40 h-14 rounded-t-md border-b-2 border-black/10 shadow-inner z-10 flex items-center justify-center text-xs font-bold text-white/80 transition-all" style="background-color: #F7E7E2;">
+                                </div>
+
+                                <!-- Layer 1 (Base tier) -->
+                                <div id="visualTier1" class="cake-layer w-52 h-16 rounded-t-md border-b-2 border-black/10 shadow-inner z-0 flex items-center justify-center text-xs font-bold text-white/80 transition-all" style="background-color: #4A3228;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cake Message Overlay Preview -->
+                        <div class="mt-4 px-4 py-2 bg-white/80 border border-gold/30 rounded-lg text-center max-w-xs">
+                            <span class="text-[10px] text-chocolat-light/60 font-semibold block uppercase">Piped Ribbon Message</span>
+                            <span id="visualMessage" class="font-serif italic text-berry text-sm font-semibold">"Happy Birthday!"</span>
+                        </div>
+                    </div>
+
+                    <!-- Right: Builder Controls -->
+                    <div class="lg:col-span-6 space-y-6 reveal-on-scroll">
+                        
+                        <!-- 1. Size Selection -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-chocolat mb-3">1. Select Cake Size & Tiers</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <button onclick="updateCakeSize(1, 45)" class="cake-size-btn active p-3 rounded-xl border-2 border-gold bg-gold/10 text-chocolat text-left transition-all">
+                                    <span class="block font-bold text-sm">6 Inch (Single)</span>
+                                    <span class="text-xs text-chocolat-light/70">4-6 Servings ($45)</span>
+                                </button>
+                                <button onclick="updateCakeSize(2, 75)" class="cake-size-btn p-3 rounded-xl border-2 border-chocolat/10 bg-white text-chocolat text-left transition-all hover:border-gold">
+                                    <span class="block font-bold text-sm">8 Inch (2 Tiers)</span>
+                                    <span class="text-xs text-chocolat-light/70">10-12 Servings ($75)</span>
+                                </button>
+                                <button onclick="updateCakeSize(3, 110)" class="cake-size-btn p-3 rounded-xl border-2 border-chocolat/10 bg-white text-chocolat text-left transition-all hover:border-gold">
+                                    <span class="block font-bold text-sm">10 Inch (3 Tiers)</span>
+                                    <span class="text-xs text-chocolat-light/70">18-22 Servings ($110)</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 2. Sponge Flavor -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-chocolat mb-3">2. Choose Sponge Flavor</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <button onclick="updateCakeFlavor('#4A3228', 'Belgian Chocolate')" class="cake-flavor-btn active p-3 rounded-xl border-2 border-gold bg-white text-chocolat flex items-center gap-2">
+                                    <span class="w-4 h-4 rounded-full bg-[#4A3228]"></span>
+                                    <span class="text-xs font-bold">Dark Choco</span>
+                                </button>
+                                <button onclick="updateCakeFlavor('#F7E7E2', 'Tahitian Vanilla')" class="cake-flavor-btn p-3 rounded-xl border-2 border-chocolat/10 bg-white text-chocolat flex items-center gap-2 hover:border-gold">
+                                    <span class="w-4 h-4 rounded-full bg-[#F7E7E2] border"></span>
+                                    <span class="text-xs font-bold">Vanilla Bean</span>
+                                </button>
+                                <button onclick="updateCakeFlavor('#8C2D41', 'Red Velvet')" class="cake-flavor-btn p-3 rounded-xl border-2 border-chocolat/10 bg-white text-chocolat flex items-center gap-2 hover:border-gold">
+                                    <span class="w-4 h-4 rounded-full bg-[#8C2D41]"></span>
+                                    <span class="text-xs font-bold">Red Velvet</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 3. Topping Selection -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-chocolat mb-3">3. Gourmet Topping</label>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button onclick="updateCakeTopping('🍓🍓🍓', 'Fresh Strawberries', 8)" class="topping-btn active p-2.5 rounded-xl border border-gold bg-gold/10 text-center text-xs font-bold">
+                                    🍓 Berries (+$8)
+                                </button>
+                                <button onclick="updateCakeTopping('🌸✨🌸', 'Edible Flowers & Gold', 12)" class="topping-btn p-2.5 rounded-xl border border-chocolat/10 bg-white text-center text-xs font-bold hover:border-gold">
+                                    🌸 Gold Leaf (+$12)
+                                </button>
+                                <button onclick="updateCakeTopping('🍫🌰🍫', 'Praline Macarons', 10)" class="topping-btn p-2.5 rounded-xl border border-chocolat/10 bg-white text-center text-xs font-bold hover:border-gold">
+                                    🍫 Macarons (+$10)
+                                </button>
+                                <button onclick="updateCakeTopping('✨🌟✨', 'Sparkle Dust', 5)" class="topping-btn p-2.5 rounded-xl border border-chocolat/10 bg-white text-center text-xs font-bold hover:border-gold">
+                                    ✨ Sparkles (+$5)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 4. Personal Piping Message -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-chocolat mb-2">4. Custom Ribbon Message</label>
+                            <input type="text" id="cakeMessageInput" oninput="updateCakeMessage(this.value)" placeholder="e.g. Happy 30th Birthday Emma!" maxlength="35" class="w-full px-4 py-3 rounded-xl border border-chocolat/15 bg-white text-sm focus:outline-none focus:border-gold">
+                        </div>
+
+                        <!-- Price & Add Custom Order CTA -->
+                        <div class="pt-4 border-t border-chocolat/10 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-chocolat-light/70 uppercase font-semibold block">Total Custom Price</span>
+                                <span id="customCakeTotalPrice" class="font-serif text-3xl font-bold text-chocolat">$53.00</span>
+                            </div>
+                            <button onclick="addCustomCakeToCart()" class="px-8 py-4 rounded-full bg-berry text-white font-semibold hover:bg-chocolat transition-all duration-300 shadow-md flex items-center gap-2">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Add Custom Cake</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BAKER'S STORY & CRAFTSMANSHIP -->
+        <section id="story" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-5 space-y-6 reveal-on-scroll">
+                    <span class="text-xs font-bold uppercase tracking-[0.2em] text-gold">Master Baker's Craft</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-bold text-chocolat">Slow Baking. Zero Shortcuts.</h2>
+                    <p class="text-chocolat-light/80 text-sm sm:text-base leading-relaxed">
+                        Founded by Chef Julian Laurent after 12 years in Parisian patisseries, L'Étoile brings age-old sourdough starter cultures and stone-ground organic wheat to your morning table.
+                    </p>
+
+                    <!-- Interactive Process Timeline -->
+                    <div class="space-y-4 pt-4">
+                        <div class="flex gap-4 items-start p-3 rounded-2xl bg-cream-dark/50 hover:bg-cream-dark transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-gold/20 text-gold flex items-center justify-center font-bold shrink-0 text-sm">
+                                04:00
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-chocolat">Wild Yeast Starter Mixing</h4>
+                                <p class="text-xs text-chocolat-light/70">Sourdough cultures fed daily with pure spring water and rye flour.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 items-start p-3 rounded-2xl bg-cream-dark/50 hover:bg-cream-dark transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-berry/20 text-berry flex items-center justify-center font-bold shrink-0 text-sm">
+                                06:30
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-chocolat">Hand-Lamination & Layering</h4>
+                                <p class="text-xs text-chocolat-light/70">81 delicate butter layers folded manually for maximum croissant crispness.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 items-start p-3 rounded-2xl bg-cream-dark/50 hover:bg-cream-dark transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-chocolat/20 text-chocolat flex items-center justify-center font-bold shrink-0 text-sm">
+                                08:00
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-chocolat">Stone Hearth Baking</h4>
+                                <p class="text-xs text-chocolat-light/70">Loaves baked on high-temperature French basalt stone hearths.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Baker Graphic Collage -->
+                <div class="lg:col-span-7 grid grid-cols-2 gap-4 reveal-on-scroll">
+                    <div class="space-y-4">
+                        <div class="rounded-3xl overflow-hidden shadow-lg h-64 border-2 border-white">
+                            <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80" alt="Baker dusting flour" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="rounded-3xl overflow-hidden shadow-lg h-44 border-2 border-white">
+                            <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" alt="Freshly baked pastry" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        </div>
+                    </div>
+                    <div class="space-y-4 pt-8">
+                        <div class="rounded-3xl overflow-hidden shadow-lg h-44 border-2 border-white">
+                            <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80" alt="Chocolate Cake" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="rounded-3xl overflow-hidden shadow-lg h-64 border-2 border-white">
+                            <img src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?auto=format&fit=crop&w=800&q=80" alt="Artisanal sourdough" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- REVIEWS & TESTIMONIALS CAROUSEL -->
+        <section id="reviews" class="py-20 bg-blush/50 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto space-y-3 mb-12 reveal-on-scroll">
+                    <span class="text-xs font-bold uppercase tracking-[0.2em] text-gold">Sweet Words</span>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-chocolat">Loved by Local Pastry Connoisseurs</h2>
+                </div>
+
+                <!-- Testimonials Slider Wrapper -->
+                <div class="relative max-w-4xl mx-auto reveal-on-scroll">
+                    <div id="reviewContainer" class="glass-panel p-8 sm:p-12 rounded-3xl shadow-soft-warm text-center transition-all duration-500 min-h-[260px] flex flex-col justify-center items-center">
+                        <div class="flex text-gold text-lg mb-4 justify-center" id="reviewStars">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <blockquote class="font-serif text-xl sm:text-2xl text-chocolat italic mb-6 leading-relaxed" id="reviewText">
+                            "The sourdough croissant from L'Étoile ruined all other pastries for me. Flaky, buttery perfection!"
+                        </blockquote>
+                        <div class="flex items-center gap-3">
+                            <img id="reviewAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" class="w-12 h-12 rounded-full object-cover border-2 border-gold" alt="Reviewer">
+                            <div class="text-left">
+                                <h4 id="reviewAuthor" class="font-bold text-sm text-chocolat">Sophie Moreau</h4>
+                                <span id="reviewRole" class="text-xs text-chocolat-light/70">Food Critic, Le Figaro</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Carousel Controls -->
+                    <div class="flex justify-center items-center gap-4 mt-6">
+                        <button onclick="prevReview()" class="p-3 rounded-full bg-white text-chocolat shadow-md hover:bg-gold hover:text-white transition-all">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <div class="flex gap-2" id="carouselDots">
+                            <span class="w-3 h-3 rounded-full bg-gold"></span>
+                            <span class="w-3 h-3 rounded-full bg-chocolat/20"></span>
+                            <span class="w-3 h-3 rounded-full bg-chocolat/20"></span>
+                        </div>
+                        <button onclick="nextReview()" class="p-3 rounded-full bg-white text-chocolat shadow-md hover:bg-gold hover:text-white transition-all">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER & LOCATION -->
+    <footer class="bg-chocolat text-cream pt-16 pb-12 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+                
+                <!-- Brand Info -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gold flex items-center justify-center text-chocolat font-bold">
+                            <i class="fa-solid fa-wheat-awn"></i>
+                        </div>
+                        <span class="font-serif text-2xl font-bold tracking-tight text-white">L'Étoile</span>
+                    </div>
+                    <p class="text-xs text-cream/70 leading-relaxed">
+                        Boutique Parisian style bakery crafting sourdough, butter pastries, and custom occasion cakes every single day.
+                    </p>
+                    <div class="flex items-center gap-3 text-gold">
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-gold hover:text-chocolat flex items-center justify-center transition-all"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-gold hover:text-chocolat flex items-center justify-center transition-all"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-gold hover:text-chocolat flex items-center justify-center transition-all"><i class="fa-brands fa-pinterest"></i></a>
+                    </div>
+                </div>
+
+                <!-- Hours & Live Status -->
+                <div class="space-y-3">
+                    <h4 class="font-serif text-lg font-bold text-gold">Hours & Fresh Batches</h4>
+                    <ul class="text-xs text-cream/80 space-y-2">
+                        <li class="flex justify-between"><span>Mon - Fri:</span> <span class="font-semibold text-white">7:00 AM - 7:00 PM</span></li>
+                        <li class="flex justify-between"><span>Saturday:</span> <span class="font-semibold text-white">8:00 AM - 6:00 PM</span></li>
+                        <li class="flex justify-between"><span>Sunday:</span> <span class="font-semibold text-white">8:00 AM - 3:00 PM</span></li>
+                    </ul>
+                    <div class="pt-2">
+                        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            Open Today • Fresh Croissants Ready
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="space-y-3">
+                    <h4 class="font-serif text-lg font-bold text-gold">Visit Our Bakery</h4>
+                    <p class="text-xs text-cream/80 leading-relaxed">
+                        <i class="fa-solid fa-location-dot text-gold mr-2"></i> 482 Rue Saint-Honoré, Boutique #4<br>
+                        Paris, France 75001
+                    </p>
+                    <p class="text-xs text-cream/80">
+                        <i class="fa-solid fa-phone text-gold mr-2"></i> +33 (0)1 42 68 90 00
+                    </p>
+                    <p class="text-xs text-cream/80">
+                        <i class="fa-solid fa-envelope text-gold mr-2"></i> bonjour@letoilebakery.com
+                    </p>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="space-y-3">
+                    <h4 class="font-serif text-lg font-bold text-gold">Sweet Newsletter</h4>
+                    <p class="text-xs text-cream/70">Subscribe for weekly secret menu alerts and pastry recipes.</p>
+                    <form onsubmit="handleNewsletter(event)" class="space-y-2">
+                        <div class="relative">
+                            <input type="email" required placeholder="Enter your email" class="w-full px-4 py-2.5 rounded-xl bg-white/10 text-white text-xs placeholder:text-cream/40 focus:outline-none focus:ring-1 focus:ring-gold border border-white/10">
+                            <button type="submit" class="absolute right-1.5 top-1.5 bottom-1.5 px-3 rounded-lg bg-gold text-chocolat text-xs font-bold hover:bg-white transition-all">Join</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-cream/50">
+                <p>© 2026 L'Étoile Artisanal Bakery. All Rights Reserved.</p>
+                <div class="flex gap-4 mt-4 sm:mt-0">
+                    <a href="#" class="hover:text-gold">Privacy Policy</a>
+                    <a href="#" class="hover:text-gold">Terms of Service</a>
+                    <a href="#" class="hover:text-gold">Allergen Guide</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- QUICK VIEW MODAL -->
+    <div id="quickViewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-chocolat/60 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-cream rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 border border-gold/20 relative" id="quickViewCard">
+            <button onclick="closeQuickView()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/80 text-chocolat hover:bg-berry hover:text-white transition-colors flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="grid grid-cols-1 sm:grid-cols-2">
+                <div class="h-64 sm:h-auto relative">
+                    <img id="modalImg" src="" class="w-full h-full object-cover" alt="Product">
+                    <span id="modalBadge" class="absolute top-4 left-4 px-3 py-1 rounded-full bg-berry text-white text-[10px] font-bold uppercase tracking-wider">Fresh</span>
+                </div>
+                <div class="p-6 sm:p-8 flex flex-col justify-between space-y-4">
+                    <div>
+                        <span id="modalCategory" class="text-xs font-bold text-gold uppercase tracking-wider block">Category</span>
+                        <h3 id="modalTitle" class="font-serif text-2xl font-bold text-chocolat mt-1">Product Title</h3>
+                        <p id="modalPrice" class="font-serif text-xl font-bold text-berry mt-2">$0.00</p>
+                        <p id="modalDesc" class="text-xs text-chocolat-light/80 mt-3 leading-relaxed">Delicious artisanal item crafted fresh daily.</p>
+                        
+                        <!-- Allergen Info -->
+                        <div class="mt-4 pt-4 border-t border-chocolat/10 flex items-center gap-2 text-[11px] text-chocolat-light/70">
+                            <i class="fa-solid fa-wheat-awn text-gold"></i>
+                            <span>Contains Organic Flour, Dairy & Eggs</span>
+                        </div>
+                    </div>
+
+                    <button id="modalAddBtn" onclick="" class="w-full py-3.5 rounded-full bg-chocolat text-white font-bold hover:bg-gold hover:text-chocolat transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        <span>Add to Basket</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIVE CART DRAWER -->
+    <div id="cartDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-cream shadow-2xl transform translate-x-full transition-transform duration-400 ease-in-out flex flex-col border-l border-gold/20">
+        <!-- Cart Header -->
+        <div class="p-6 border-b border-chocolat/10 flex items-center justify-between bg-cream-dark/40">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-basket-shopping text-gold text-xl"></i>
+                <h3 class="font-serif text-xl font-bold text-chocolat">Your Bakery Basket</h3>
+            </div>
+            <button onclick="toggleCart(false)" class="p-2 text-chocolat-light hover:text-berry">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items List -->
+        <div id="cartItemsList" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <!-- Empty Cart Placeholder -->
+            <div id="emptyCartMsg" class="h-full flex flex-col items-center justify-center text-center text-chocolat-light/60 space-y-3">
+                <i class="fa-solid fa-cookie-bite text-5xl text-gold/40"></i>
+                <p class="font-serif text-lg text-chocolat">Your basket is hungry!</p>
+                <p class="text-xs">Add freshly baked croissants or custom cakes to proceed.</p>
+            </div>
+        </div>
+
+        <!-- Cart Footer / Checkout -->
+        <div class="p-6 border-t border-chocolat/10 bg-cream-dark/30 space-y-4">
+            <div class="space-y-1.5 text-xs">
+                <div class="flex justify-between text-chocolat-light">
+                    <span>Subtotal</span>
+                    <span id="cartSubtotal" class="font-bold text-chocolat">$0.00</span>
+                </div>
+                <div class="flex justify-between text-chocolat-light">
+                    <span>Fresh Packaging</span>
+                    <span class="font-bold text-emerald-600">FREE</span>
+                </div>
+                <div class="flex justify-between text-base font-bold text-chocolat pt-2 border-t border-chocolat/10">
+                    <span>Total Amount</span>
+                    <span id="cartTotal" class="font-serif text-xl text-berry">$0.00</span>
+                </div>
+            </div>
+
+            <button onclick="checkout()" class="w-full py-4 rounded-full bg-chocolat text-cream font-bold hover:bg-gold hover:text-chocolat transition-all duration-300 shadow-lg flex items-center justify-center gap-2">
+                <span>Proceed to Order</span>
+                <i class="fa-solid fa-arrow-right-long"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 glass-dark text-cream px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 border border-gold/30">
+        <div class="w-8 h-8 rounded-full bg-gold/20 text-gold flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-check text-sm"></i>
+        </div>
+        <span id="toastMsg" class="text-xs font-semibold">Item added to your basket!</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* ----------------------------------------------------
+           1. BAKERY PRODUCTS DATA STORE
+        ---------------------------------------------------- */
+        const PRODUCTS = [
+            {
+                id: 'p1',
+                name: 'Signature Honey Croissant',
+                category: 'pastries',
+                price: 5.50,
+                badge: 'Bestseller',
+                image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80',
+                desc: 'Flaky 81-layer French butter croissant brushed with organic wildflower honey.'
+            },
+            {
+                id: 'p2',
+                name: 'Raspberry Velvet Tart',
+                category: 'cakes',
+                price: 8.75,
+                badge: 'Fresh Daily',
+                image: 'https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&w=600&q=80',
+                desc: 'Almond sable crust filled with vanilla pastry cream and topped with fresh raspberries.'
+            },
+            {
+                id: 'p3',
+                name: 'Rustic Sourdough Boule',
+                category: 'breads',
+                price: 7.00,
+                badge: '48hr Ferment',
+                image: 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=600&q=80',
+                desc: 'Crusty, chewy traditional sourdough baked on basalt hearth stones.'
+            },
+            {
+                id: 'p4',
+                name: 'Valrhona Opera Cake Slice',
+                category: 'cakes',
+                price: 9.50,
+                badge: 'Chef Pick',
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80',
+                desc: 'Layers of almond sponge cake soaked in coffee syrup, ganache and coffee buttercream.'
+            },
+            {
+                id: 'p5',
+                name: 'Pistachio Pain au Chocolat',
+                category: 'pastries',
+                price: 6.25,
+                badge: 'Limited Batch',
+                image: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?auto=format&fit=crop&w=600&q=80',
+                desc: 'Filled with double Valrhona dark chocolate bars and Sicilian pistachio cream.'
+            },
+            {
+                id: 'p6',
+                name: 'Artisanal Latte Macchiato',
+                category: 'coffee',
+                price: 4.80,
+                badge: 'Single Origin',
+                image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80',
+                desc: 'Double shot Ethiopian Yirgacheffe espresso with steamed micro-foam oat milk.'
+            },
+            {
+                id: 'p7',
+                name: 'Wild Blueberry Brioche',
+                category: 'pastries',
+                price: 5.80,
+                badge: 'Morning Classic',
+                image: 'https://images.unsplash.com/photo-1600618528240-fb9fc964b853?auto=format&fit=crop&w=600&q=80',
+                desc: 'Rich, soft brioche swirl stuffed with wild blueberry compote and pearl sugar.'
+            },
+            {
+                id: 'p8',
+                name: 'Einkorn Baguette',
+                category: 'breads',
+                price: 4.20,
+                badge: 'Heritage Grain',
+                image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80',
+                desc: 'Ancient grain baguette with light crisp crust and nutty open crumb structure.'
+            }
+        ];
+
+        /* ----------------------------------------------------
+           2. GLOBAL STATE
+        ---------------------------------------------------- */
+        let cart = [];
+        let currentCakeConfig = {
+            tiers: 1,
+            sizeBasePrice: 45,
+            flavorColor: '#4A3228',
+            flavorName: 'Belgian Chocolate',
+            toppingSymbol: '🍓🍓🍓',
+            toppingName: 'Fresh Strawberries',
+            toppingPrice: 8,
+            message: 'Happy Birthday!'
+        };
+
+        /* ----------------------------------------------------
+           3. CANVAS FLOUR/SUGAR DUST PARTICLES
+        ---------------------------------------------------- */
+        function initDustCanvas() {
+            const canvas = document.getElementById('dustCanvas');
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const particles = Array.from({ length: 45 }, () => ({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                radius: Math.random() * 2.5 + 0.5,
+                opacity: Math.random() * 0.5 + 0.2,
+                speedY: Math.random() * 0.4 + 0.1,
+                speedX: (Math.random() - 0.5) * 0.3
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.y -= p.speedY;
+                    p.x += p.speedX;
+
+                    if (p.y < 0) p.y = height;
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(212, 163, 89, ${p.opacity})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        /* ----------------------------------------------------
+           4. RENDER MENU ITEMS
+        ---------------------------------------------------- */
+        function renderMenu(category = 'all') {
+            const grid = document.getElementById('menuGrid');
+            grid.innerHTML = '';
+
+            const filtered = category === 'all' 
+                ? PRODUCTS 
+                : PRODUCTS.filter(p => p.category === category);
+
+            filtered.forEach(product => {
+                const card = document.createElement('div');
+                card.className = "tilt-card glass-panel rounded-3xl overflow-hidden shadow-soft-warm hover:shadow-2xl transition-all duration-300 flex flex-col group border border-gold/15 reveal-on-scroll";
+                
+                card.innerHTML = `
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-cream/90 backdrop-blur-md text-chocolat text-[10px] font-bold uppercase tracking-wider border border-gold/30">
+                            ${product.badge}
+                        </span>
+                        <button onclick="openQuickView('${product.id}')" class="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-white/90 text-chocolat hover:bg-gold hover:text-white transition-all flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 duration-300">
+                            <i class="fa-solid fa-expand text-sm"></i>
+                        </button>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-serif text-lg font-bold text-chocolat group-hover:text-gold transition-colors">${product.name}</h3>
+                                <span class="font-serif text-lg font-bold text-berry">$${product.price.toFixed(2)}</span>
+                            </div>
+                            <p class="text-xs text-chocolat-light/75 mt-2 line-clamp-2 leading-relaxed">${product.desc}</p>
+                        </div>
+                        <button onclick="addToCart('${product.id}')" class="w-full py-3 rounded-2xl bg-cream-dark hover:bg-chocolat hover:text-white text-chocolat font-bold text-xs transition-all duration-300 flex items-center justify-center gap-2 group/btn">
+                            <i class="fa-solid fa-plus text-gold group-hover/btn:rotate-90 transition-transform"></i>
+                            <span>Add To Basket</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            observeScrollElements();
+        }
+
+        function filterMenu(cat) {
+            document.querySelectorAll('.menu-tab').forEach(tab => {
+                if (tab.dataset.category === cat) {
+                    tab.className = "menu-tab active px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 bg-chocolat text-cream shadow-md";
+                } else {
+                    tab.className = "menu-tab px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 bg-cream-dark text-chocolat hover:bg-gold hover:text-white";
+                }
+            });
+            renderMenu(cat);
+        }
+
+        /* ----------------------------------------------------
+           5. QUICK VIEW MODAL LOGIC
+        ---------------------------------------------------- */
+        function openQuickView(id) {
+            const product = PRODUCTS.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('modalImg').src = product.image;
+            document.getElementById('modalBadge').textContent = product.badge;
+            document.getElementById('modalCategory').textContent = product.category;
+            document.getElementById('modalTitle').textContent = product.name;
+            document.getElementById('modalPrice').textContent = `$${product.price.toFixed(2)}`;
+            document.getElementById('modalDesc').textContent = product.desc;
+            
+            const addBtn = document.getElementById('modalAddBtn');
+            addBtn.onclick = () => {
+                addToCart(product.id);
+                closeQuickView();
+            };
+
+            const modal = document.getElementById('quickViewModal');
+            const card = document.getElementById('quickViewCard');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-95');
+            card.classList.add('scale-100');
+        }
+
+        function closeQuickView() {
+            const modal = document.getElementById('quickViewModal');
+            const card = document.getElementById('quickViewCard');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+        }
+
+        /* ----------------------------------------------------
+           6. CAKE CUSTOMIZER VISUALIZER LOGIC
+        ---------------------------------------------------- */
+        function updateCakeSize(tiers, basePrice) {
+            currentCakeConfig.tiers = tiers;
+            currentCakeConfig.sizeBasePrice = basePrice;
+
+            // Highlight buttons
+            document.querySelectorAll('.cake-size-btn').forEach((btn, index) => {
+                if (index === tiers - 1) {
+                    btn.className = "cake-size-btn active p-3 rounded-xl border-2 border-gold bg-gold/10 text-chocolat text-left transition-all";
+                } else {
+                    btn.className = "cake-size-btn p-3 rounded-xl border-2 border-chocolat/10 bg-white text-chocolat text-left transition-all hover:border-gold";
+                }
+            });
+
+            // Adjust Tier visibility in visual preview
+            const tier2 = document.getElementById('visualTier2');
+            const tier3 = document.getElementById('visualTier3');
+
+            if (tiers === 1) {
+                tier2.style.display = 'none';
+                tier3.style.display = 'none';
+            } else if (tiers === 2) {
+                tier2.style.display = 'flex';
+                tier3.style.display = 'none';
+            } else {
+                tier2.style.display = 'flex';
+                tier3.style.display = 'flex';
+            }
+
+            recalcCakePrice();
+        }
+
+        function updateCakeFlavor(colorHex, name) {
+            currentCakeConfig.flavorColor = colorHex;
+            currentCakeConfig.flavorName = name;
+
+            // Update SVG visual tier backgrounds
+            document.getElementById('visualTier1').style.backgroundColor = colorHex;
+            document.getElementById('visualTier2').style.backgroundColor = colorHex;
+            document.getElementById('visualTier3').style.backgroundColor = colorHex;
+
+            recalcCakePrice();
+        }
+
+        function updateCakeTopping(symbol, name, price) {
+            currentCakeConfig.toppingSymbol = symbol;
+            currentCakeConfig.toppingName = name;
+            currentCakeConfig.toppingPrice = price;
+
+            document.getElementById('visualTopping').textContent = symbol;
+            recalcCakePrice();
+        }
+
+        function updateCakeMessage(msg) {
+            currentCakeConfig.message = msg || 'Your Special Message';
+            document.getElementById('visualMessage').textContent = `"${currentCakeConfig.message}"`;
+        }
+
+        function recalcCakePrice() {
+            const total = currentCakeConfig.sizeBasePrice + currentCakeConfig.toppingPrice;
+            document.getElementById('customCakeTotalPrice').textContent = `$${total.toFixed(2)}`;
+        }
+
+        function addCustomCakeToCart() {
+            const total = currentCakeConfig.sizeBasePrice + currentCakeConfig.toppingPrice;
+            const customItem = {
+                id: 'custom-' + Date.now(),
+                name: `Custom ${currentCakeConfig.tiers}-Tier Cake`,
+                price: total,
+                image: 'https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=300&q=80',
+                desc: `${currentCakeConfig.flavorName} Sponge, ${currentCakeConfig.toppingName}. Msg: "${currentCakeConfig.message}"`,
+                quantity: 1
+            };
+
+            cart.push(customItem);
+            updateCartUI();
+            toggleCart(true);
+            showToast('Custom Cake added to your basket!');
+        }
+
+        /* ----------------------------------------------------
+           7. CART LOGIC
+        ---------------------------------------------------- */
+        function addToCart(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            showToast(`${product.name} added to basket!`);
+        }
+
+        function updateQuantity(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (!item) return;
+
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== id);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartList = document.getElementById('cartItemsList');
+            const emptyMsg = document.getElementById('emptyCartMsg');
+            const countBadge = document.getElementById('cartCountBadge');
+            
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            // Badge counter animation
+            countBadge.textContent = totalItems;
+            if (totalItems > 0) {
+                countBadge.classList.remove('scale-0');
+                countBadge.classList.add('scale-100');
+            } else {
+                countBadge.classList.add('scale-0');
+            }
+
+            if (cart.length === 0) {
+                cartList.innerHTML = '';
+                cartList.appendChild(emptyMsg);
+                document.getElementById('cartSubtotal').textContent = '$0.00';
+                document.getElementById('cartTotal').textContent = '$0.00';
+                return;
+            }
+
+            cartList.innerHTML = '';
+            let subtotal = 0;
+
+            cart.forEach(item => {
+                subtotal += item.price * item.quantity;
+
+                const itemRow = document.createElement('div');
+                itemRow.className = "flex items-center gap-4 p-3 bg-white rounded-2xl border border-chocolat/10 shadow-sm";
+                itemRow.innerHTML = `
+                    <img src="${item.image}" class="w-16 h-16 rounded-xl object-cover" alt="${item.name}">
+                    <div class="flex-1">
+                        <h4 class="font-bold text-xs text-chocolat line-clamp-1">${item.name}</h4>
+                        <span class="text-xs font-bold text-berry">$${(item.price * item.quantity).toFixed(2)}</span>
+                        <div class="flex items-center gap-2 mt-2">
+                            <button onclick="updateQuantity('${item.id}', -1)" class="w-6 h-6 rounded-lg bg-cream-dark flex items-center justify-center text-xs text-chocolat hover:bg-gold hover:text-white">-</button>
+                            <span class="text-xs font-bold px-1">${item.quantity}</span>
+                            <button onclick="updateQuantity('${item.id}', 1)" class="w-6 h-6 rounded-lg bg-cream-dark flex items-center justify-center text-xs text-chocolat hover:bg-gold hover:text-white">+</button>
+                        </div>
+                    </div>
+                `;
+                cartList.appendChild(itemRow);
+            });
+
+            document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('cartTotal').textContent = `$${subtotal.toFixed(2)}`;
+        }
+
+        function toggleCart(open) {
+            const drawer = document.getElementById('cartDrawer');
+            if (open) {
+                drawer.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.add('translate-x-full');
+            }
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showToast('Your basket is empty!');
+                return;
+            }
+            showToast('Order received! Fresh baking in progress ✨');
+            cart = [];
+            updateCartUI();
+            toggleCart(false);
+        }
+
+        /* ----------------------------------------------------
+           8. REVIEWS CAROUSEL DATA & LOGIC
+        ---------------------------------------------------- */
+        const REVIEWS = [
+            {
+                quote: "The sourdough croissant from L'Étoile ruined all other pastries for me. Flaky, buttery perfection!",
+                author: "Sophie Moreau",
+                role: "Food Critic, Le Figaro",
+                avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
+            },
+            {
+                quote: "Ordered a custom 3-tier Velvet cake for my wedding. Guests are still talking about how moist and beautiful it was!",
+                author: "Antoine & Claire",
+                role: "Wedding Clients",
+                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
+            },
+            {
+                quote: "Best coffee and pain au chocolat in the city. The atmosphere and warm aromas make it my daily sanctuary.",
+                author: "Elena Rostova",
+                role: "Local Architect",
+                avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80"
+            }
+        ];
+
+        let currentReviewIdx = 0;
+
+        function updateReviewCard() {
+            const r = REVIEWS[currentReviewIdx];
+            const container = document.getElementById('reviewContainer');
+            
+            container.style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('reviewText').textContent = `"${r.quote}"`;
+                document.getElementById('reviewAuthor').textContent = r.author;
+                document.getElementById('reviewRole').textContent = r.role;
+                document.getElementById('reviewAvatar').src = r.avatar;
+                container.style.opacity = '1';
+            }, 250);
+
+            // Dots update
+            const dots = document.getElementById('carouselDots').children;
+            Array.from(dots).forEach((dot, idx) => {
+                if (idx === currentReviewIdx) {
+                    dot.className = "w-3 h-3 rounded-full bg-gold";
+                } else {
+                    dot.className = "w-3 h-3 rounded-full bg-chocolat/20";
+                }
+            });
+        }
+
+        function nextReview() {
+            currentReviewIdx = (currentReviewIdx + 1) % REVIEWS.length;
+            updateReviewCard();
+        }
+
+        function prevReview() {
+            currentReviewIdx = (currentReviewIdx - 1 + REVIEWS.length) % REVIEWS.length;
+            updateReviewCard();
+        }
+
+        /* ----------------------------------------------------
+           9. UI UTILITIES (TOAST, MOBILE NAV, TILT, SCROLL)
+        ---------------------------------------------------- */
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function toggleMobileNav() {
+            const nav = document.getElementById('mobileNav');
+            nav.classList.toggle('hidden');
+        }
+
+        function handleNewsletter(e) {
+            e.preventDefault();
+            showToast('Welcome to L\'Étoile secret menu club! 🥐');
+            e.target.reset();
+        }
+
+        // 3D Tilt Effect on Hero Card
+        function initTiltEffect() {
+            const card = document.getElementById('heroCard');
+            if (!card) return;
+
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (centerY - y) / 12;
+                const rotateY = (x - centerX) / 12;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            });
+        }
+
+        // IntersectionObserver for Scroll Animations
+        function observeScrollElements() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        }
+
+        // Header Blur on Scroll
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('mainHeader');
+            if (window.scrollY > 40) {
+                header.classList.add('glass-panel', 'shadow-md');
+            } else {
+                header.classList.remove('glass-panel', 'shadow-md');
+            }
+        });
+
+        /* ----------------------------------------------------
+           10. INITIALIZATION
+        ---------------------------------------------------- */
+        window.onload = function() {
+            initDustCanvas();
+            renderMenu('all');
+            initTiltEffect();
+            observeScrollElements();
+            updateCakeSize(1, 45); // Init customizer defaults
+        };
+    </script>
+</body>
+</html>
